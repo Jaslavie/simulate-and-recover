@@ -6,4 +6,4 @@ echo "========================================================"
 
 python src/diffusion_model.py
 
-echo "Tests complete"
+echo "Diffusion model run complete"

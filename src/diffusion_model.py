@@ -6,7 +6,6 @@ import pandas as pd
 import os
 from datetime import datetime
 
-
 class DiffusionModel:
     def __init__(self):
         self.a = None
@@ -16,17 +15,17 @@ class DiffusionModel:
     def randomly_select_parameters(self):
         self.a = np.random.uniform(0.5, 2) # boundary separation, cautiousness of decision making
         self.v = np.random.uniform(0.5, 2) # drift rate, speed of evidence accumulation
-        self.t0 = np.random.uniform(0, 1) # non-decision time, speed of response
+        self.t0 = np.random.uniform(0.1, 0.5) # non-decision time, speed of response
         return self.a, self.v, self.t0
 
-    def forward(self):
+    def forward(self, a, v, t0):
         # parameters: a, v, t0
         # forward equation to compute summary stats from parameters
-        y = np.exp(-self.a * self.v) 
+        y = np.exp(-a * v) 
 
         R_pred = 1 / (y + 1) # predicted accuracy
-        M_pred = self.t0 + (self.a / (2 * self.v)) * ((1 - y) / (1 + y)) # predicted mean response time
-        V_pred = (self.a / (2 * self.v**3)) * ((1 - 2*self.a*self.v*y - y**2) / ((y + 1)**2)) # predicted variance of RT
+        M_pred = t0 + (a / (2 * v)) * ((1 - y) / (1 + y)) # predicted mean response time
+        V_pred = (a / (2 * v**3)) * ((1 - 2*a*v*y - y**2) / ((y + 1)**2)) # predicted variance of RT
         return R_pred, M_pred, V_pred
 
     def inverse(self, R_obs, M_obs, V_obs):
