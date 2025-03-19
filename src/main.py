@@ -1,7 +1,10 @@
 # main script to run simulations and save results
 import pandas as pd
 from datetime import datetime
-from src.simulation import Simulation
+from simulation import Simulation
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.plot import plot_parameter_recovery, plot_bias_and_mse, display_summary_statistics
 
 def main():

@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 from datetime import datetime
-from src.diffusion_model import DiffusionModel
+from diffusion_model import DiffusionModel
 
 class Simulation:
     def __init__(self):
