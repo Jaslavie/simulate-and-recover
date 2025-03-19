@@ -51,3 +51,25 @@ class DiffusionModel:
         t_est = M_obs - t_term
 
         return a_est, v_est, t_est
+    def simulate_trial_data(self, a, v, t0, n_trials):
+        # simulate data for a single trial from model parameters
+        # returns array of accuracy and RT's
+        # ex: acc = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0]
+        # ex: rt = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4]
+        R_pred,M_pred, V_pred = self.forward(a, v, t0)
+
+        # Accuracy ~ Binomial(R_pred, n_trials)
+        # only count if correct (acc = 1)
+        acc = np.random.binomial(1, R_pred, n_trials)
+
+        # RT ~ Normal(M_pred, V_pred)
+        # correct (acc = 1), incorrect (acc = 0) 
+        rt_correct_trials = np.random.normal(M_pred, np.sqrt(V_pred/n_trials), np.sum(acc))
+        rt_error_trials = np.random.normal(M_pred, np.sqrt(V_pred/n_trials), n_trials - np.sum(acc))
+
+        # combine RT
+        rt = np.zeros(n_trials) 
+        rt[acc == 1] = rt_correct_trials
+        rt[acc == 0] = rt_error_trials
+
+        return acc, rt
