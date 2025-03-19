@@ -4,6 +4,7 @@ echo "========================================================"
 echo "Running EZ Diffusion Model Simulate-and-Recover Exercise"
 echo "========================================================"
 
-python src/diffusion_model.py
+python src/main.py
 
-echo "Diffusion model run complete"
+echo "Diffusion simulation complete and results saved"
+

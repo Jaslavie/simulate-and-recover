@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
@@ -56,20 +55,22 @@ class DiffusionModel:
         # returns array of accuracy and RT's
         # ex: acc = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0]
         # ex: rt = [0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4]
-        R_pred,M_pred, V_pred = self.forward(a, v, t0)
+        R_pred, M_pred, V_pred = self.forward(a, v, t0)
 
         # Accuracy ~ Binomial(R_pred, n_trials)
-        # only count if correct (acc = 1)
+        # Generate binary accuracy outcomes (0 or 1)
         acc = np.random.binomial(1, R_pred, n_trials)
-
+        
         # RT ~ Normal(M_pred, V_pred)
-        # correct (acc = 1), incorrect (acc = 0) 
-        rt_correct_trials = np.random.normal(M_pred, np.sqrt(V_pred/n_trials), np.sum(acc))
-        rt_error_trials = np.random.normal(M_pred, np.sqrt(V_pred/n_trials), n_trials - np.sum(acc))
-
-        # combine RT
-        rt = np.zeros(n_trials) 
-        rt[acc == 1] = rt_correct_trials
-        rt[acc == 0] = rt_error_trials
-
+        # Generate RT values for correct and incorrect trials
+        rt = np.random.normal(M_pred, np.sqrt(V_pred), n_trials)
+        # rt = np.zeros(n_trials)
+        # if np.sum(acc) > 0:
+        #     rt[acc == 1] = np.random.normal(M_pred, np.sqrt(V_pred), np.sum(acc))      
+        # if np.sum(acc) < n_trials:
+        #     rt[acc == 0] = np.random.normal(M_pred, np.sqrt(V_pred), n_trials - np.sum(acc))
+        
+        # Ensure all RTs are at least t0
+        rt = np.maximum(rt, t0)
+        
         return acc, rt
