@@ -63,13 +63,14 @@ class DiffusionModel:
         
         # RT ~ Normal(M_pred, V_pred)
         # Generate RT values for correct and incorrect trials
-        rt = np.random.normal(M_pred, np.sqrt(V_pred), n_trials)
-        # rt = np.zeros(n_trials)
-        # if np.sum(acc) > 0:
-        #     rt[acc == 1] = np.random.normal(M_pred, np.sqrt(V_pred), np.sum(acc))      
-        # if np.sum(acc) < n_trials:
-        #     rt[acc == 0] = np.random.normal(M_pred, np.sqrt(V_pred), n_trials - np.sum(acc))
+        # add sampling variability
+        M_obs = np.random.normal(M_pred, np.sqrt(V_pred/n_trials))
+        if n_trials > 1:
+            V_obs = V_pred * (n_trials -1) / np.random.chisquare(n_trials - 1)
+        else:
+            V_obs = V_pred
         
+        rt = np.random.normal(M_obs, np.sqrt(V_obs), n_trials)
         # Ensure all RTs are at least t0
         rt = np.maximum(rt, t0)
         

@@ -6,5 +6,3 @@ echo "========================================================"
 
 python src/main.py
 
-echo "Diffusion simulation complete and results saved"
-

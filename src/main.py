@@ -1,9 +1,6 @@
 # main script to run simulations and save results
-import os
-import sys
 import pandas as pd
 from datetime import datetime
-
 from src.simulation import Simulation
 from utils.plot import plot_parameter_recovery, plot_bias_and_mse, display_summary_statistics
 
